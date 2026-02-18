@@ -33,7 +33,7 @@ app.get("/api/search", async (req, res) => {
       duration: r.duration || "",
       sub: r.sub || "",
       dub: r.dub || "",
-      rating: r.rating || "",
+      rating: "",
     }));
 
     res.json({ results });
@@ -58,18 +58,20 @@ app.get("/api/detail", async (req, res) => {
       epId: ep.id,
     }));
 
+    const hasDub = data.subOrDub === "both" || data.subOrDub === "dub";
+
     res.json({
       slug,
       title: data.title,
-      poster: data.cover || data.image || "",
+      poster: data.image || "",
       description: data.description || "",
-      rating: data.rating || "",
+      rating: "",
       animeType: data.type || "",
-      duration: data.duration || "",
-      studio: data.studios?.[0] || "",
+      duration: "",
+      studio: "",
       genres: data.genres || [],
-      subCount: data.subOrDub === "sub" ? episodes.length : (data.sub || ""),
-      dubCount: data.subOrDub === "dub" ? episodes.length : (data.dub || ""),
+      subCount: data.hasSub ? String(data.totalEpisodes || episodes.length) : "",
+      dubCount: hasDub ? String(data.totalEpisodes || episodes.length) : "",
       episodes,
     });
   } catch (err) {
@@ -83,13 +85,15 @@ app.get("/api/sources", async (req, res) => {
   if (!epId) return res.status(400).json({ error: "epId is required" });
 
   try {
-    const { data } = await axios.get(
-      `${CONSUMET}/anime/hianime/watch?episodeId=${encodeURIComponent(epId)}&server=vidstreaming&dub=${category === "dub"}`,
-      { timeout: 20000 }
-    );
+    const url = `${CONSUMET}/anime/hianime/watch/${encodeURIComponent(epId)}?server=hd-1&dub=${category === "dub"}`;
+    console.log("[sources] Fetching:", url);
+
+    const { data } = await axios.get(url, { timeout: 20000 });
 
     const source = data.sources?.[0]?.url;
     if (!source) throw new Error("No source URL returned from Consumet");
+
+    console.log("[sources] Got source:", source);
 
     const tracks = (data.subtitles || [])
       .filter(t => t.url && t.lang !== "Thumbnails")
