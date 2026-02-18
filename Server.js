@@ -463,6 +463,11 @@ const translationCache = new Map();
 
 app.use(express.static(PUBLIC_DIR));
 
+app.get("/ip", async (req, res) => {
+  const r = await axios.get("https://api.ipify.org?format=json");
+  res.send(r.data);
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, "index.html"));
 });
@@ -791,3 +796,4 @@ app.listen(PORT, () => {
   console.log(`Serving static files from: ${PUBLIC_DIR}`);
   console.log(`index.html exists: ${fs.existsSync(path.join(PUBLIC_DIR, "index.html"))}\n`);
 });
+
