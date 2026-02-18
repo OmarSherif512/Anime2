@@ -665,7 +665,7 @@ app.get("/api/sources", async (req, res) => {
     }
 
     res.json({
-      source: `/proxy?url=${encodeURIComponent(sourceUrl)}`,
+      source: sourceUrl,
       tracks,
       intro: sourcesJson.intro || null,
       outro: sourcesJson.outro || null,
@@ -790,4 +790,5 @@ app.listen(PORT, () => {
   console.log(`\nAniSearch running at http://localhost:${PORT}`);
   console.log(`Serving static files from: ${PUBLIC_DIR}`);
   console.log(`index.html exists: ${fs.existsSync(path.join(PUBLIC_DIR, "index.html"))}\n`);
+
 });
