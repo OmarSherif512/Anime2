@@ -21,7 +21,7 @@ app.get("/api/search", async (req, res) => {
   if (!q) return res.json({ results: [] });
 
   try {
-    const { data } = await axios.get(`${CONSUMET}/anime/zoro/search?query=${encodeURIComponent(q)}`, {
+    const { data } = await axios.get(`${CONSUMET}/anime/hianime/search?query=${encodeURIComponent(q)}`, {
       timeout: 15000,
     });
 
@@ -48,7 +48,7 @@ app.get("/api/detail", async (req, res) => {
   if (!slug) return res.status(400).json({ error: "Missing slug" });
 
   try {
-    const { data } = await axios.get(`${CONSUMET}/anime/zoro/info?id=${encodeURIComponent(slug)}`, {
+    const { data } = await axios.get(`${CONSUMET}/anime/hianime/info?id=${encodeURIComponent(slug)}`, {
       timeout: 15000,
     });
 
@@ -84,7 +84,7 @@ app.get("/api/sources", async (req, res) => {
 
   try {
     const { data } = await axios.get(
-      `${CONSUMET}/anime/zoro/watch?episodeId=${encodeURIComponent(epId)}&server=vidstreaming&dub=${category === "dub"}`,
+      `${CONSUMET}/anime/hianime/watch?episodeId=${encodeURIComponent(epId)}&server=vidstreaming&dub=${category === "dub"}`,
       { timeout: 20000 }
     );
 
