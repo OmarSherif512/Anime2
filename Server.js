@@ -665,7 +665,7 @@ app.get("/api/sources", async (req, res) => {
     }
 
     res.json({
-      source: sourceUrl,
+      source: `/proxy?url=${encodeURIComponent(sourceUrl)}`,
       tracks,
       intro: sourcesJson.intro || null,
       outro: sourcesJson.outro || null,
@@ -792,3 +792,4 @@ app.listen(PORT, () => {
   console.log(`index.html exists: ${fs.existsSync(path.join(PUBLIC_DIR, "index.html"))}\n`);
 
 });
+
